@@ -33,7 +33,15 @@ describe 'concat', :type => :define do
 
     let(:title) { title }
     let(:params) { params }
-    let(:facts) {{ :concat_basedir => concatdir, :id => id }}
+    let(:facts) do
+      {
+        :concat_basedir => concatdir,
+        :id             => id,
+        :osfamily       => 'Debian',
+        :path           => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :kernel         => 'Linux',
+      }
+    end
 
     if p[:ensure] == 'present'
       it do
@@ -144,6 +152,7 @@ describe 'concat', :type => :define do
         should contain_exec("concat_#{title}").with({
           :alias   => "concat_#{fragdir}",
           :command => 'true',
+          :unless  => 'true',
           :path    => '/bin:/usr/bin',
         })
       end
